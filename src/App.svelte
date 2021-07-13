@@ -1,30 +1,28 @@
 <script>
-import { onMount } from "svelte";
-let value =0;
+// import { onMount } from "svelte";
+let value = 0;
 let counter = 1;
-let themeValue=1;
-let storage =[0,0];
-let operator= false;
+let themeValue = 1;
+let storage = [0,0];
+let operator = false;
 let operatorWhich = "";
 let firstTime = false;
 let dotClicked = false;
 
-const updateTheme = (a)=> {
+const updateTheme = (a) => {
 	themeValue = a.target.value;	
 }
 
 const number = (x) => {
 	
 	if (operator) {
-		value=x;
-	}else if(value.toString().length==14) {
+		value = x;
+	} else if(value.toString().length == 14) {
 		return;
-	}else{
+	} else{
 			if (dotClicked) {
-				console.log(value);
-				let valueLength= value.length;
-				value= Number(value) + x*(Math.pow(10, -(counter)));
-				console.log(value);
+				let valueLength = value.length;
+				value = Number(value) + x*(Math.pow(10, -(counter)));				
 				if (value < 1) {
 					value = value.toPrecision(valueLength-1);
 				}else{
@@ -42,83 +40,74 @@ const number = (x) => {
 }
 const operation = (operand) =>{
 	
-	if (storage[0]==0) {
-		storage[0]=value;
+	if (storage[0] == 0) {
+		storage[0] = value;
 				
-	} else if (operatorWhich!=operand) {
-		console.log(operatorWhich,operand);
-		console.log(firstTime);
+	} else if (operatorWhich != operand) {
 		// 5 + 2 den sonra * basıldığında  * değil + çağırmak için
 		return operation(operatorWhich);
 	} else if (firstTime) {
-		console.log("firsttime");
 		switch(operand){
 			case "add":{				
-				value=Number(storage[0])+ Number(value);
-				console.log(value);
-				value = value.toFixed(10);
-				console.log(value);
-				value= value.toString().replace(/0+$/,"")	
-				console.log(value);			
+				value = Number(storage[0])+ Number(value);				
+				value = value.toFixed(10);				
+				value = value.toString().replace(/0+$/,"")							
 				break;
 			}
 			case "multiply":{
-				value=storage[0]*value;
-				console.log(value);
-				value = value.toPrecision(10).replace(/0+$/,"");
-				console.log(value);
+				value = storage[0]*value;				
+				value = value.toPrecision(10).replace(/0+$/,"");			
 				break;
 			}
 			case "substract":{				
-			 	value=storage[0]-value;	 			
+			 	value = storage[0]-value;	 			
 				value = value.toPrecision(storage[0].toString().length).replace(/0+$/,"");					
 				break;
 			}
 			case "divide":{
-				value=storage[0]/value;
+				value = storage[0]/value;
 				value = value.toPrecision(10).replace(/0+$/,"");
 				break;
 			}
 			case "equal":{
-				value=storage[0];
+				value = storage[0];
 				break;
 			}			
 		}		
-		storage[0]=value;
+		storage[0] = value;
 		firstTime = false;
 	}
-	console.log("erdem");
-	operator=true; // bu ne?
-	operatorWhich =operand
-	dotClicked=false;
-	counter=1;
+	operator = true;
+	operatorWhich = operand
+	dotClicked = false;
+	counter = 1;
 }
 
 const reset = () => {
-	value =0;	
+	value = 0;	
 	storage[0] = 0;
-	operator= false;
+	operator = false;
 	operatorWhich = "";
 	firstTime = false;
-	dotClicked=false;
-	counter=1;
+	dotClicked = false;
+	counter = 1;
 }
 
 const dot = ()=> {
 	if (dotClicked) {
 		return;
-	}else{
-		value= value+"." ;		
+	} else {
+		value = value + "." ;		
 		dotClicked = true;
 	}	
 }	
 const del = () => {	
 	if (value.toString().length == 1) {
 		value = 0;
-	}else if (dotClicked) {
+	} else if (dotClicked) {
 		value = value.toString().substring(0, value.toString().length - 1); 
 		counter--;
-	}else{
+	} else {
 		value = value.toString().substring(0, value.toString().length - 1); 
 	}	
 }
