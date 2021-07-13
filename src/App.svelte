@@ -21,8 +21,10 @@ const number = (x) => {
 		return;
 	}else{
 			if (dotClicked) {
+				console.log(value);
 				let valueLength= value.length;
 				value= Number(value) + x*(Math.pow(10, -(counter)));
+				console.log(value);
 				if (value < 1) {
 					value = value.toPrecision(valueLength-1);
 				}else{
@@ -44,17 +46,27 @@ const operation = (operand) =>{
 		storage[0]=value;
 				
 	} else if (operatorWhich!=operand) {
+		console.log(operatorWhich,operand);
+		console.log(firstTime);
 		// 5 + 2 den sonra * basıldığında  * değil + çağırmak için
-		operation(operatorWhich);
+		return operation(operatorWhich);
 	} else if (firstTime) {
+		console.log("firsttime");
 		switch(operand){
 			case "add":{				
-				value=Number(storage[0])+ Number(value);				
+				value=Number(storage[0])+ Number(value);
+				console.log(value);
+				value = value.toFixed(10);
+				console.log(value);
+				value= value.toString().replace(/0+$/,"")	
+				console.log(value);			
 				break;
 			}
 			case "multiply":{
 				value=storage[0]*value;
-				value = value.toPrecision(10).replace(/.0+$/,"");
+				console.log(value);
+				value = value.toPrecision(10).replace(/0+$/,"");
+				console.log(value);
 				break;
 			}
 			case "substract":{				
@@ -64,7 +76,7 @@ const operation = (operand) =>{
 			}
 			case "divide":{
 				value=storage[0]/value;
-				value = value.toPrecision(10).replace(/.0+$/,"");
+				value = value.toPrecision(10).replace(/0+$/,"");
 				break;
 			}
 			case "equal":{
@@ -75,11 +87,11 @@ const operation = (operand) =>{
 		storage[0]=value;
 		firstTime = false;
 	}
-	operator=true;
+	console.log("erdem");
+	operator=true; // bu ne?
 	operatorWhich =operand
 	dotClicked=false;
 	counter=1;
-
 }
 
 const reset = () => {
@@ -103,8 +115,11 @@ const dot = ()=> {
 const del = () => {	
 	if (value.toString().length == 1) {
 		value = 0;
-	}else {
-		value = parseFloat(value.toString().substring(0, value.toString().length - 1)); 
+	}else if (dotClicked) {
+		value = value.toString().substring(0, value.toString().length - 1); 
+		counter--;
+	}else{
+		value = value.toString().substring(0, value.toString().length - 1); 
 	}	
 }
 
@@ -113,7 +128,6 @@ const del = () => {
 		let slider = document.getElementById("myRange");
 		slider.addEventListener("change", (a) => {
 			themeValue = a.target.value;
-			console.log(themeValue);
 		})
 	}); */
 	
@@ -139,7 +153,7 @@ const del = () => {
 			</div>
 		</div>
 		<div class={ `display display${themeValue}`}>
-			<div class={ `display-box display-box${themeValue}`}>				
+			<div data-display class={ `display-box display-box${themeValue}`}>				
 				{value}
 			</div>
 		</div>
